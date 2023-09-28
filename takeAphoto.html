@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      
+      <link rel="stylesheet" href="./style.css" />
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>카메라 이미지 불러오기</title>
+    </head>
+<!-- 기존 코드는 생략 -->
+
+<style>
+    body {
+      background-color: beige; /* 배경색을 베이지로 설정합니다. */
+    }
+  
+    .text__column {
+      background-color: lightgreen; /* 텍스트 상자 주변 30px를 밝은 녹색으로 설정합니다. */
+      padding: 30px; /* 텍스트 상자 주변 패딩을 추가합니다. */
+    }
+  
+    /* 기존 스타일은 그대로 유지됩니다. */
+    input[type="text"] {
+      max-width: 450px;
+    }
+  </style>
+  
+  <!-- 나머지 코드는 그대로 유지됩니다. -->
+  </body>
+  </html>
+  
+
+    <body>
+        
+      <div class="photo-text">
+        <div class="photo__coulmn">
+          <h1>사진 촬영</h1>
+          <video id="camera-preview" autoplay></video>
+          <button class="post-img" onclick="startCamera();">사진 촬영</button>
+          <canvas id="canvas" style="display: none"></canvas>
+          <img id="captured-image" src="" alt="Captured Image" />
+        </div>
+        <!-- 기존 코드는 생략 -->
+
+<div class="text__column">
+  <button id="capture-button">찰칵</button>
+      <input type="text" id="textInput" placeholder="오늘의 행복을 기록해주세요." />
+      <button id="submitButton">전송</button>
+      <div id="resultBox" style="display: none;"></div>
+  </div>
+  
+  <script>
+    const cameraPreview = document.getElementById("camera-preview");
+    const captureButton = document.getElementById("capture-button");
+    const canvas = document.getElementById("canvas");
+    const capturedImage = document.getElementById("captured-image");
+    const textInput = document.getElementById("textInput");
+    const submitButton = document.getElementById("submitButton");
+    const resultBox = document.getElementById("resultBox");
+    let stream;
+  
+    // 카메라에 접근하여 비디오 스트림을 얻습니다.
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        cameraPreview.srcObject = stream;
+      } catch (error) {
+        console.error("카메라에 접근할 수 없습니다:", error);
+      }
+    }
+  
+    // 사진을 촬영합니다.
+    function capturePhoto() {
+      const context = canvas.getContext("2d");
+      canvas.width = cameraPreview.videoWidth;
+      canvas.height = cameraPreview.videoHeight;
+      context.drawImage(cameraPreview, 0, 0, canvas.width, canvas.height);
+      capturedImage.src = canvas.toDataURL("image/png");
+      stopCamera();
+    }
+  
+    // 카메라를 종료합니다.
+    function stopCamera() {
+      cameraPreview.style = "display : none;";
+    }
+  
+  
+    captureButton.addEventListener("click", () => {
+      capturePhoto();
+    });
+  
+    submitButton.addEventListener("click", () => {
+      console.log("새로고침 안됨");
+      const inputValue = textInput.value;
+      // 여기에서 서버로 데이터를 전송하거나 필요한 작업을 수행합니다.
+  
+      // "전송이 완료되었습니다!" 메시지를 표시합니다.
+      resultBox.textContent = "전송이 완료되었습니다!";
+      resultBox.style.display = "flex";
+      resultBox.style.position = "absolute";
+      resultBox.style.top = "0";
+      resultBox.style.left = "0";
+      resultBox.style.width = "300px";
+      resultBox.style.height = "200px";
+      resultBox.style.background = "red";
+      resultBox.style.color = "aliceblue";
+      resultBox.style.marginTop = "calc(50% - 100px)";
+      resultBox.style.marginLeft = "calc(50% - 150px)";
+      resultBox.style.alignItems = "center";
+      resultBox.style.justifyContent = "center";
+      // 몇 초 후에 메시지를 숨기려면 setTimeout을 사용할 수 있습니다.
+      setTimeout(() => {
+        resultBox.style.display = "none";
+      }, 3000); // 3초 후에 메시지를 숨깁니다.
+    });
+  </script>
+  </body>
+  </html>
+  
